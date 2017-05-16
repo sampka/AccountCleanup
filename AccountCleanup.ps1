@@ -9,7 +9,7 @@ import-module activedirectory
 
 $oldDate = [DateTime]::Today.AddDays(-90)
 $warnDate = [DateTime]::Today.AddDays(-60)
-$AMSearchBase = "OU=Disabled Accounts,OU=AMER,OU=CorpUsers,DC=COMPANY,DC=com"
+$AMSearchBase = "OU=Disabled,OU=WCAA Accounts,DC=WCAA,DC=local"
 $ShortRegion = "AM"
 $Region = "AM Region"
 $delUsers = @()
@@ -23,7 +23,7 @@ $disabledUsers = Get-ADUser -filter {(Enabled -eq $False)} -Searchbase $AMSearch
 
 foreach ($name in $disabledUsers) {
 	if ($name.info -ne "WHITELIST" -and $name.modified -le $oldDate) {
-		Remove-ADUser -id $name.SID -confirm:$false
+		#Remove-ADUser -id $name.SID -confirm:$false
 		$delUsers = $delUsers + $name
 		}
 	elseif ($name.info -eq "WHITELIST") {
@@ -40,7 +40,7 @@ foreach ($name in $disabledUsers) {
 		}
 }
 
-$report = "c:\powershell\report.htm" 
+$report = "c:\Temp\report.htm" 
 ##Clears the report in case there is data in it
 Clear-Content $report
 ##Builds the headers and formatting for the report
@@ -174,7 +174,7 @@ Add-content $report  "</table>"
 add-content $report  "<table width='100%'>" 
 add-content $report  "<tr bgcolor='#CCCCCC'>" 
 add-content $report  "<td colspan='7' height='25' align='center'>" 
-add-content $report  "<font face='tahoma' color='#003399' size='4'><strong>The following users were modified in the last 30 days</strong></font>" 
+add-content $report  "<font face='tahoma' color='#003399' size='4'><strong>The following users were modified in the last 90 days</strong></font>" 
 add-content $report  "</td>" 
 add-content $report  "</tr>" 
 add-content $report  "</table>" 
@@ -206,9 +206,9 @@ Add-Content $report "</body>"
 Add-Content $report "</html>" 
 
 ##Assembles and sends completion email with DL information##
-$emailFrom = "DOMAINCONTROLLER@COMPANY.com"
-$emailTo = "DeletedAccountNotifications@COMPANY.com"
-$subject = "COMPANY $Region Terminated User Cleanup Script Complete"
+$emailFrom = "sam.kaufman@wcaa.us"
+$emailTo = "sam.kaufman@wcaa.us"
+$subject = "Wayne County IT $Region Terminated User Cleanup Script Complete"
 $smtpServer = "MAILSERVER.COMPANY.com"
 $body = Get-Content $report | Out-String
 
