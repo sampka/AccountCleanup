@@ -1,5 +1,5 @@
 ###################################################################################################################
-##DisabledUserCleanup.ps1
+##
 ##This script is designed to poll AD for any disabled user accounts that are over 30 days old and deletes them.
 ##The results are put into a file and then emailed to IT staff.
 ###################################################################################################################
@@ -8,7 +8,7 @@
 import-module activedirectory
 
 $oldDate = [DateTime]::Today.AddDays(-90)
-$warnDate = [DateTime]::Today.AddDays(-60)
+$warnDate = [DateTime]::Today.AddDays(-83)
 $AMSearchBase = "OU=Disabled,OU=WCAA Accounts,DC=WCAA,DC=local"
 $ShortRegion = "AM"
 $Region = "AM Region"
