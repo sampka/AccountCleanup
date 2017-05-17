@@ -1,5 +1,5 @@
 ###################################################################################################################
-##
+##DisabledUserCleanup.ps1
 ##This script is designed to poll AD for any disabled user accounts that are over 30 days old and deletes them.
 ##The results are put into a file and then emailed to IT staff.
 ###################################################################################################################
@@ -11,7 +11,7 @@ $oldDate = [DateTime]::Today.AddDays(-90)
 $warnDate = [DateTime]::Today.AddDays(-83)
 $AMSearchBase = "OU=Disabled,OU=WCAA Accounts,DC=WCAA,DC=local"
 $ShortRegion = "AM"
-$Region = "AM Region"
+
 $delUsers = @()
 $warnUsers = @()
 $wlistUsers = @()
@@ -208,8 +208,8 @@ Add-Content $report "</html>"
 ##Assembles and sends completion email with DL information##
 $emailFrom = "sam.kaufman@wcaa.us"
 $emailTo = "sam.kaufman@wcaa.us"
-$subject = "Wayne County IT $Region Terminated User Cleanup Script Complete"
-$smtpServer = "MAILSERVER.COMPANY.com"
+$subject = "Wayne County IT Terminated User Cleanup Script Complete"
+$smtpServer = "SEXCH01.wcaa.local"
 $body = Get-Content $report | Out-String
 
 Send-MailMessage -To $emailTo -From $emailFrom -Subject $subject -BodyAsHtml -Body $body -SmtpServer $smtpServer
